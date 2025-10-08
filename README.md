@@ -1,7 +1,6 @@
 # Employee Attrition Analysis with SVP & Random Forest
 
 **SETUP Packages**
-
 library(dplyr)         # For data manipulation
 library(ggplot2)       # For data visualization
 library(caret)         # For machine learning workflow support
