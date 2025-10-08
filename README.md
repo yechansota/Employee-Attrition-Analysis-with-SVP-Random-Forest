@@ -7,8 +7,6 @@ It also demonstrates data preprocessing, model tuning, evaluation (AUC/ROC), and
 ---
 
 ## 📦 1. Setup — Load Required Packages
-
-```r
 library(dplyr)         # Data manipulation
 library(ggplot2)       # Visualization
 library(caret)         # ML workflow utilities
