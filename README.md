@@ -1,6 +1,5 @@
-# Employee Attrition Analysis with SVP & Random Forest
+# "Employee Attrition Analysis with SVP & Random Forest"
 
-# ===================================================================
 # SETUP Packages
 library(dplyr)         # For data manipulation
 library(ggplot2)       # For data visualization
@@ -12,58 +11,41 @@ library(ada)           # For AdaBoost
 library(ROCR)          # For AUC/ROC calculations
 library(pdp)           # For Partial Dependence Plots (PDP) - Model Interpretation
 library(lime)          # For LIME - Model Interpretation
-# ===================================================================
 
-# ===================================================================
 # 1. DATA LOADING AND EXPLORATION
 MYdataset <- read.csv("Attrition_Prediction.csv")
 str(MYdataset)
 summary(MYdataset)
-# ===================================================================
 
-# ===================================================================
 # 2. DATA PREPROCESSING AND CLEANING
 vars_to_drop <- c("Over18", "EmployeeCount", "StandardHours", "EmployeeNumber")
 MYdataset <- MYdataset %>% select(-all_of(vars_to_drop))
 
 conv_fact <- c("Education", "EnvironmentSatisfaction", "JobInvolvement", "JobLevel", "JobSatisfaction", "PerformanceRating", "RelationshipSatisfaction", "StockOptionLevel", "TrainingTimesLastYear", "WorkLifeBalance")
 MYdataset[, conv_fact] <- lapply(MYdataset[, conv_fact], as.factor)
-
 MYdataset$Attrition <- as.factor(MYdataset$Attrition)
-# ===================================================================
 
-# ===================================================================
 # 3. EXPLORATORY DATA VISUALIZATION (EDA)
 # 4. DATA SPLITTING & ADVANCED PREPROCESSING
 set.seed(123) 
 trainIndex <- createDataPartition(MYdataset$Attrition, p = .75, list = FALSE)
 ModelData <- MYdataset[trainIndex, ]
 ValidateData <- MYdataset[-trainIndex, ]
-
 Subject <- c("OverTime", "MonthlyIncome", "TotalWorkingYears", "HourlyRate", "JobRole", "Age")
 Objective <- "Attrition"
-
 TrainingData <- ModelData[, c(Subject, Objective)]
 ValidationData <- ValidateData[, c(Subject, Objective)]
-# ===================================================================
 
-
-
-# ===================================================================
 # 5. Advanced Preprocessing: Scaling Numeric Variables 
 preProcValues <- preProcess(TrainingData, method = c("center", "scale"))
 TrainingData_scaled <- predict(preProcValues, TrainingData)
 ValidationData_scaled <- predict(preProcValues, ValidationData)
 str(TrainingData_scaled)
-# ===================================================================
 
-# ===================================================================
 # 6. Checking for STATISTICAL SIGNIFICANCE of Predictors
 logit_model <- glm(Attrition ~ ., data = TrainingData, family = binomial(link = "logit"))
 print(summary(logit_model))
-# ===================================================================
 
-# ===================================================================
 # 7. PREDICTIVE MODELING & EVALUATION (Using SCALED Data)
 calculate_auc <- function(model, validation_data) {
   if (inherits(model, "svm")) {
@@ -80,9 +62,7 @@ calculate_auc <- function(model, validation_data) {
   auc_obj <- performance(pred_obj, measure = "auc")
   return(auc_obj@y.values[[1]])
 }
-# ===================================================================
 
-# ===================================================================
 # --- MODEL 1: Support Vector Machine (SVM) ---
 print("--- Training SVM on SCALED data ---")
 tune_results <- tune(svm, Attrition ~ ., data = TrainingData_scaled, kernel = 'radial',
@@ -92,9 +72,7 @@ predict_SVM <- predict(model_SVM, ValidationData_scaled)
 result_SVM <- confusionMatrix(data = predict_SVM, reference = ValidationData_scaled$Attrition, positive = "Yes")
 auc_SVM <- calculate_auc(model_SVM, ValidationData_scaled)
 print(paste("SVM AUC:", round(auc_SVM, 4)))
-# ===================================================================
 
-# ===================================================================
 # --- MODEL 2: Random Forest ---
 # (Note: Tree-based models like Random Forest are not sensitive to scaling, 
 # but we use the scaled data for consistency in our workflow).
