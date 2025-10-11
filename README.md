@@ -6,7 +6,7 @@ This project analyzed data from **1,470** employees to build a predictive model 
 
 ---
 
-## 설명을 넣자 
+## Explanation will be updated..
 ```r
 library(dplyr)         # Data manipulation
 library(ggplot2)       # Visualization
