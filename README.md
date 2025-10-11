@@ -1,12 +1,12 @@
-# 🧠 Employee Attrition Analysis  
+# Employee Attrition Analysis  
 ### Using Support Vector Machine (SVM) & Random Forest
 
-This project analyzes **employee attrition** using multiple machine learning models (SVM & Random Forest).  
-It also demonstrates data preprocessing, model tuning, evaluation (AUC/ROC), and interpretability techniques (PDP, LIME).
+This project analyzed data from **1,470** employees to build a predictive model that identifies the key drivers of attrition. The primary drivers identified are Overtime and specific Job Roles, with a notable pattern among early-career employees. With the statistical significant factors and produced a high-performing Random Forest model capable of predicting employee trunover. This will be helpful for HR management to retain talents and succession planning for each department
+
 
 ---
 
-## 📦 1. Setup — Load Required Packages
+## 설명을 넣자 
 ```r
 library(dplyr)         # Data manipulation
 library(ggplot2)       # Visualization
@@ -19,8 +19,6 @@ library(ROCR)          # ROC/AUC performance
 library(pdp)           # Partial Dependence Plot (Model interpretation)
 library(lime)          # LIME (Local Interpretable Model Explanation)
 
-## 2. Data Loading & Initial Exploration
-```r
 MYdataset <- read.csv("Attrition_Prediction.csv")
 str(MYdataset)
 summary(MYdataset)
